@@ -10,7 +10,37 @@ import (
 // Bot represents a very limited bot that does not understand much,
 // but tried his best to answer question he already knows the answer.
 type Bot struct {
+
+	// brian keep and the mapping between precomputed regex and answer function.
 	brain map[*regexp.Regexp]HandlerFunc
+
+	// We can extend this a little bit and can in the future add a storage (in mem or redis)
+	// so user can ask bit to remember something and ask later what was it.
+	// Example:
+	//	bot.New(redis.Memory("localhost:6379"))
+	//	bot.Respond("remember (.+) is (.+)", b.Remember)
+	//	bot.Respond("what is (.+)", b.WhatIs)
+	//
+	// and the function can be something like this
+	//
+	//	func (b *Bot) Remember(msg Message) string {
+	//		key, value := msg.Matches[0], msg.Matches[1]
+	//		b.Store.Set(key, value)
+	//		return "OK, I'll remember %s is %s", key, value
+	//	}
+	//
+	//	func (b *Bot) WhatIs(msg Message) string {
+	//		key := msg.Matches[0]
+	//		var value string
+	//		ok, err := b.Store.Get(key, &value)
+	//		if err != nil {
+	//			return "Humm, cannot remember, i lost my brain."
+	//		}
+	//		if !ok {
+	//			return "I do not remember %q", key
+	//		}
+	//		return "%s is %s", key, value
+	//	}
 }
 
 // HandlerFunc represents the function signature required for implementing a bot response.
@@ -81,6 +111,10 @@ func (b *Bot) RespondRegex(expr string, f HandlerFunc) error {
 // Sentence takes a input text or a question and will match again boot knowledge.
 // if no match found a generic sorry message will be returned.
 func (b *Bot) Sentence(ctx context.Context, msg string) string {
+
+	// This is clairely not the best option, the runtime complexity is O(n)
+	// this can be improved, I did not have time to reseach how chatbot should be
+	// implemented, so I went to the simple solution.
 	for k, v := range b.brain {
 		matches := k.FindStringSubmatch(msg)
 		if len(matches) == 0 {
@@ -92,5 +126,5 @@ func (b *Bot) Sentence(ctx context.Context, msg string) string {
 			Text:    msg,
 		})
 	}
-	return "nope"
+	return "Sorry, I do not know the answer, I will guess the answer will be 42."
 }

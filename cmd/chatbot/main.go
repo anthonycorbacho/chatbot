@@ -92,6 +92,8 @@ func run() error {
 		}
 	}()
 
+	// TODO: Add exporter for jeager
+
 	// Start the HTTP server
 
 	// Make a channel to listen for an interrupt or terminate signal from the OS.
