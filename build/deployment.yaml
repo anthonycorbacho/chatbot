@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatbot-demo
+  labels:
+    app: chatbot-demo
+spec:
+  selector:
+    matchLabels:
+      app: chatbot-demo
+  template:
+    metadata:
+      labels:
+        app: chatbot-demo
+    spec:
+      containers:
+      - name: chatbot-demo
+        image: anthonycorbacho/chatbot:latest
+        ports:
+        - containerPort: 4000
+        - containerPort: 3000
+        - containerPort: 9000

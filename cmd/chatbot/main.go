@@ -12,12 +12,14 @@ import (
 	"syscall"
 	"time"
 
+	"contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/anthonycorbacho/chatbot/internal/bot"
 	"github.com/anthonycorbacho/chatbot/internal/version"
 	"github.com/gorilla/mux"
 	"github.com/kelseyhightower/envconfig"
 	"go.opencensus.io/plugin/ochttp"
 	"go.opencensus.io/plugin/ochttp/propagation/tracecontext"
+	"go.opencensus.io/stats/view"
 )
 
 func main() {
@@ -41,6 +43,7 @@ func run() error {
 			ShutdownTimeout time.Duration `default:"5s"`
 		}
 		Observability struct {
+			MetricHost string `default:"0.0.0.0:5000"`
 		}
 	}
 	err := envconfig.Process("chatboot", &cfg)
@@ -64,8 +67,29 @@ func run() error {
 	log.Println("Started : Initializing debugging support")
 
 	go func() {
-		log.Printf("main : Debug Listening %s", cfg.Web.DebugHost)
-		log.Printf("main : Debug Listener closed : %v", http.ListenAndServe(cfg.Web.DebugHost, http.DefaultServeMux))
+		log.Printf("Debug Listening %s", cfg.Web.DebugHost)
+		log.Printf("Debug Listener closed : %v", http.ListenAndServe(cfg.Web.DebugHost, http.DefaultServeMux))
+	}()
+
+	// Start Observability
+	_ = view.Register(ochttp.DefaultServerViews...)
+
+	// register prometheus
+	pe, err := prometheus.NewExporter(prometheus.Options{
+		Namespace: "chatbot",
+	})
+	if err != nil {
+		return fmt.Errorf("Creating prometheus exporter: %w", err)
+	}
+	// Ensure that we register it as a stats exporter.
+	view.RegisterExporter(pe)
+
+	go func() {
+		mux := http.NewServeMux()
+		mux.Handle("/metrics", pe)
+		if err := http.ListenAndServe(cfg.Observability.MetricHost, mux); err != nil {
+			fmt.Errorf("Starting prometheus metric server: %w", err)
+		}
 	}()
 
 	// Start the HTTP server

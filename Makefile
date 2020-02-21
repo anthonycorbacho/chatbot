@@ -51,7 +51,6 @@ build:			## Builds the code
 
 build-docker:		## Builds the code in docker
 		docker build \
-			-f ./build/Dockerfile \
 			-t $(PROJECT):$(VERSION) \
 			--build-arg BUILD_DATE=`date +%Y-%m-%dT%H:%M:%SZ` \
 			--build-arg VCS_REF=`git rev-parse --short HEAD` \
