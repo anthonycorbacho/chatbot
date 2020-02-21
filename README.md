@@ -5,6 +5,17 @@ Chatbot is a HTTP server that listen to a endpoint (http://localthost:4000/chatb
 
 ## Build
 
+You need to make sure to have installed on your machine
+
+- Docker with Kubernetes configured
+- Go (version 1.13)
+- Make
+- Tilt
+
+### Make option
+
+type `make help` to see the list of options
+
 ### Run on your machine
 
 You can run chatbot on your machine, but first your need

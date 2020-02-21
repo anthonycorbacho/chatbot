@@ -88,7 +88,7 @@ func run() error {
 		mux := http.NewServeMux()
 		mux.Handle("/metrics", pe)
 		if err := http.ListenAndServe(cfg.Observability.MetricHost, mux); err != nil {
-			fmt.Errorf("Starting prometheus metric server: %w", err)
+			log.Printf("Starting prometheus metric server: %e", err)
 		}
 	}()
 
@@ -176,7 +176,7 @@ func chatbotRoute(chatbot *bot.Bot) http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		w.Write(js)
+		w.Write(js) // nolint
 	}
 }
 
@@ -184,17 +184,17 @@ func initChatbot() *bot.Bot {
 	chatbot := bot.New()
 
 	// Better implementation would be to construct this set of answer from a file.
-	chatbot.Respond("ping", func(msg bot.Message) string {
+	chatbot.Respond("ping", func(msg bot.Message) string { // nolint
 		return "pong!"
 	})
-	chatbot.Respond("what is your name?", func(msg bot.Message) string {
+	chatbot.Respond("what is your name?", func(msg bot.Message) string { // nolint
 		return "My name is Anthony."
 	})
-	chatbot.Respond("Where are you located?", func(msg bot.Message) string {
+	chatbot.Respond("Where are you located?", func(msg bot.Message) string { // nolint
 		return "Seoul"
 	})
 
-	chatbot.Respond("What is your age?", func(msg bot.Message) string {
+	chatbot.Respond("What is your age?", func(msg bot.Message) string { // nolint
 		return "That is a secret :)"
 	})
 

@@ -61,7 +61,7 @@ tools:			## Install developer tools
 
 # See golangci.yml in extra folder for linters setup
 linter: 		## Run the linter
-		./bin/golangci-lint run -c ../golangci.yml ./...
+		./bin/golangci-lint run -c golangci.yml ./...
 
 test: 			## Test the code
 		$(GOTEST) -v $(GO_PKGS)
