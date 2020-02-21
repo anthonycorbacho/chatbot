@@ -1,0 +1,28 @@
+### macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+### Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+### IDE Goland
+.idea/
+
+### IDE Code
+.vscode
+
+### IDE Emacs
+*~
+\#*\#
+.\#*
+
+### Other
+bin/
