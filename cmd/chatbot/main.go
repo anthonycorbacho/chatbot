@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/anthonycorbacho/chatbot/internal/bot"
+	"github.com/anthonycorbacho/chatbot/internal/version"
 	"github.com/gorilla/mux"
 	"github.com/kelseyhightower/envconfig"
 	"go.opencensus.io/plugin/ochttp"
@@ -48,7 +49,7 @@ func run() error {
 	}
 
 	// Start App
-	log.Printf("Started: Application initializing")
+	log.Printf("Started: Application initializing version %v", version.Get())
 	defer log.Println("main : Completed")
 
 	// Initialize chatbot

@@ -35,7 +35,7 @@ DIST_DIR = ./dist
 BUILD_PACKAGE = ./cmd/chatbot
 GO_PKGS?=$$(go list ./...)
 
-VERSION_PACKAGE = github.com/anthonycorbacho/foundation/version
+VERSION_PACKAGE = github.com/anthonycorbacho/chatbot/internal/version
 GO_LDFLAGS :="
 GO_LDFLAGS += -X $(VERSION_PACKAGE).version=$(VERSION)
 GO_LDFLAGS += -X $(VERSION_PACKAGE).buildDate=$(shell date +'%Y-%m-%dT%H:%M:%SZ')

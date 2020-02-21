@@ -7,4 +7,5 @@ require (
 	github.com/gorilla/mux v1.7.4
 	github.com/kelseyhightower/envconfig v1.4.0
 	go.opencensus.io v0.22.3
+	golang.org/x/net v0.0.0-20190926025831-c00fd9afed17 // indirect
 )
